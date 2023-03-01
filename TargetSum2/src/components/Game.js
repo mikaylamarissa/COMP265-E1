@@ -13,7 +13,9 @@ class Game extends React.Component {
     return (
       <View style={styles.container}>
         <Text style={styles.target}>{this.target}</Text>
-        {this.randomNumbers.map((randomNumbers, index) => <Text key={index}>{randomNumbers}</Text>)}
+        <View style={styles.randomContainer}>{this.randomNumbers.map((randomNumbers, index) => <Text style={styles.random} key={index}>{randomNumbers}</Text>
+        )}
+        </View>
       </View>
     );
   }
@@ -27,9 +29,27 @@ const styles = StyleSheet.create({
   },
 
   target: {
-    fontSize: 40,
+    fontSize: 50,
     backgroundColor: '#aaa',
-    marginHorizontal: 50,
+    margin: 50,
+    textAlign: 'center',
+  },
+
+  randomContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+   
+  },
+
+  random: {
+    backgroundColor: '#5883',
+    width: 120,
+    padding:10,
+    marginHorizontal: 15,
+    marginVertical: 25,
+    fontSize: 35,
     textAlign: 'center',
   },
 });
