@@ -37,15 +37,15 @@ class Game extends React.Component {
     if (sumSelected > this.target){
       return 'LOST';
     }
-  }
+  };
   render() {
     const gameStatus = this.gameStatus();
     return (
       <View style={styles.container}>
-        <Text style={styles.target}>{this.target}</Text>
+        <Text style={[styles.target, styles[`STATUS_${gameStatus}`]]}>{this.target}</Text>
         <View style={styles.randomContainer}>{
           this.randomNumbers.map((randomNumbers, index) =>
-            <RandomNumber key={index} id={index} number={randomNumbers} isDisabled={this.isNumberSelected(index)} onPress={this.selectNumber}/>
+            <RandomNumber key={index} id={index} number={randomNumbers} isDisabled={this.isNumberSelected(index) || gameStatus !== 'PLAYING'} onPress={this.selectNumber}/>
           )}
         </View>
         <Text>{gameStatus}</Text>
@@ -84,6 +84,15 @@ const styles = StyleSheet.create({
     marginVertical: 25,
     fontSize: 35,
     textAlign: 'center',
+  },
+  STATUS_PLAYING: {
+    backgroundColor:'#aaa',
+  },
+  STATUS_WON: {
+    backgroundColor:'green',
+  },
+  STATUS_LOST : {
+    backgroundColor:'red',
   },
 });
 
