@@ -9,7 +9,7 @@ class RandomNumber extends React.Component {
   static propTypes = {
     id: PropTypes.number.isRequired,
     number: PropTypes.number.isRequired,
-    isDisabled:PropTypes.bool.isRequired,
+    isDisabled: PropTypes.bool.isRequired,
     onPress: PropTypes.func.isRequired,
   };
   handlePress = () => {
@@ -17,7 +17,7 @@ class RandomNumber extends React.Component {
       return;
     }
     this.props.onPress(this.props.id);
-  }
+  };
   render (){
     return (
       <TouchableOpacity onPress={this.handlePress}>

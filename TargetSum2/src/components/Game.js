@@ -14,20 +14,18 @@ class Game extends React.Component {
   };
   state = {
     selectedIDs: [],
-    remainingSeconds: this.props.initialSecondFfs,
+    remainingSeconds: this.props.initialSeconds,
   };
   gameStatus = 'PLAYING';
   randomNumbers = Array.from({ length: this.props.randomNumberCount }).map(() => 1 + Math.floor(10 * Math.random()));
   target = this.randomNumbers.slice(0, this.props.randomNumberCount - 2).reduce((acc, curr) => acc + curr, 0);
   shuffledRandomNumbers = shuffle(this.randomNumbers);
+
   componentDidMount() {
     this.intervalId = setInterval(() => {
       this.setState((prevState) => { return { remainingSeconds: prevState.remainingSeconds - 1 }; }, () => { if (this.state.remainingSeconds === 0) { clearInterval(this.intervalId); } });
     }, 1000);
   }
-  //reset game
-
-
 
   componentWillUnmount() {
     clearInterval(this.intervalId);
@@ -40,16 +38,16 @@ class Game extends React.Component {
     this.setState((prevState) => ({
       selectedIDs: [...prevState.selectedIDs, numberIndex],
     }));
-
-  }
+  };
   // eslint-disable-next-line react/no-deprecated
-  componentWillUpdate(nextProps, nextState){
-    if (nextState.selectedIDs !== this.state.selectedIDs || nextState.remainingSeconds === 0) { this.gameStatus = this.calcgameStatus(nextState); if (this.gameStatus !== 'PLAYING'){clearInterval(this.intervalId);}}} 
-  
+  componentWillUpdate(nextProps, nextState) {
+    if (nextState.selectedIDs !== this.state.selectedIDs || nextState.remainingSeconds === 0) { this.gameStatus = this.calcgameStatus(nextState); if (this.gameStatus !== 'PLAYING') { clearInterval(this.intervalId); } }
+  }
+
   // GameStatus
   calcgameStatus = (nextState) => {
     const sumSelected = nextState.selectedIDs.reduce((acc, curr) => {
-      return acc + this.randomNumbers[curr];
+      return acc + this.shuffledRandomNumbers[curr];
     }, 0);
     if (nextState.remainingSeconds === 0) {
       return 'LOST';
@@ -65,16 +63,16 @@ class Game extends React.Component {
     }
   };
   render() {
-    const gameStatus = this.calcgameStatus;
+    const gameStatus = this.gameStatus;
     return (
       <View style={styles.container}>
         <Text style={[styles.target, styles[`STATUS_${gameStatus}`]]}>{this.target}</Text>
         <View style={styles.randomContainer}>{
-          this.randomNumbers.map((randomNumbers, index) =>
-            <RandomNumber key={index} id={index} number={randomNumbers} isDisabled={this.isNumberSelected(index) || gameStatus !== 'PLAYING'} onPress={this.selectNumber} />
+          this.shuffledRandomNumbers.map((randomNumber, index) =>
+            <RandomNumber key={index} id={index} number={randomNumber} isDisabled={this.isNumberSelected(index) || gameStatus !== 'PLAYING'} onPress={this.selectNumber} />
           )}
         </View>
-        {this.gameStatus !== 'PLAYING' && (<Button title = "Play Again" onPress = {this.props.onPlayAgain} />
+        {this.gameStatus !== 'PLAYING' && (<Button title="Play Again" onPress={this.props.onPlayAgain} />
         )}
         <Text style={styles.timer}>{this.state.remainingSeconds}</Text>
       </View>
